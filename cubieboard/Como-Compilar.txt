@@ -1,0 +1,351 @@
+
+
+emdebian mantiene los crosscompilers :
+
+deb http://www.emdebian.org/debian/ wheezy main
+deb http://www.emdebian.org/debian/ jessie main
+deb http://www.emdebian.org/debian/ sid main
+
+----
+apt-get install emdebian-archive-keyring
+ 
+apt-get install build-essential libncurses5-dev u-boot-tools qemu-user-static debootstrap git binfmt-support libusb-1.0-0-dev pkg-config
+
+
+apt-get install gcc-4.7-base-armhf-cross
+apt-get install dpkg-cross
+apt-get install gcc-4.7-arm-linux-gnueabihf
+
+cd /usr/bin/
+for i in arm-linux-gnueabi*-4.7 ; do ln -s $i ${i%%-4.7} ; done
+
+
+para obtener las tools :
+
+git clone https://github.com/linux-sunxi/sunxi-tools.git
+cd sunxi-tools
+make
+
+git clone https://github.com/linux-sunxi/sunxi-boards.git
+
+
+///////// uboot ////////////
+
+git clone https://github.com/linux-sunxi/u-boot-sunxi.git
+cd u-boot-sunxi
+
+make distclean CROSS_COMPILE=arm-linux-gnueabihf-
+make cubieboard CROSS_COMPILE=arm-linux-gnueabihf-
+
+(ver si es necesario lo de la mac)
+editar/agregar la sección [dynamic]
+con la mac:
+
+[dynamic]
+MAC = "0123456789AB"
+
+y generar el script.bin
+
+cd sunxi-boards/sys_config
+../../../sunxi-tools/fex2bin cubieboard.fex script.bin
+
+/////////// kernel //////////////////7
+
+git clone https://github.com/linux-sunxi/linux-sunxi.git -b sunxi-3.4
+cd linux-sunxi
+
+cp arch/arm/configs/sun4i_defconfig .config
+make ARCH=arm menuconfig      # check if you want to enable/disable some options
+make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- uImage modules
+make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- INSTALL_MOD_PATH=output modules_install
+
+//////////////////// ////////////////
+
+
+para el tema de la consola con framebuffer:
+
+chequear dentro de .config del kernel :
+
+CONFIG_FB_SUNXI=y
+CONFIG_FB_SUNXI_LCD=y
+CONFIG_FB_SUNXI_HDMI=y
+
+CONFIG_FRAMEBUFFER_CONSOLE=y
+CONFIG_FONT_8x8=y
+CONFIG_FONT_8x16=y
+
+y cambiar en u-boot la consola en la config :
+
+console=xxx a tty0
+si se quiere tener consola tambien por serie se pueden definir mas de 1.
+ej :
+
+console=tty0 console=ttyS0,115200
+
+ej :
+
+cat > boot/boot.cmd <<END
+ setenv bootargs console=ttyS0,115200 hdmi.audio=EDID:0 disp.screen0_output_mode=EDID:1280x1024p60 root=/dev/mmcblk0p1 rootwait panic=10 ${extra}
+ ext2load mmc 0 0x43000000 boot/script.bin
+ ext2load mmc 0 0x48000000 boot/uImage
+ bootm 0x48000000
+ END
+ mkimage -C none -A arm -T script -d boot/boot.cmd boot/boot.scr
+
+
+ 
+ 
+ -----
+ 
+ se los puede compilar como módulos tambien pero al bootear el cubie no se tiene consola y no la
+ podés activar despues.
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/////////// SD ///////////////7
+
+creo una imagen de la sd en un archivo. ej 1000M
+
+dd if=/dev/zero of=./sd bs=1024 count=1024000
+
+creo la tabla de particiones. por lo menos 2 particiones.
+1 - boot
+2 - root
+
+escribo el bootloader :
+
+dd if=../u-boot-sunxi/spl/sunxi-spl.bin of=./sd bs=1024 seek=8
+dd if=../u-boot-sunxi/u-boot.bin of=./sd bs=1024 seek=32
+
+
+
+
+
+
+
+
+
+para armar el root para el cubie.
+
+apt-get install qemu-user-static binfmt-support
+cd /root-del-cubie
+qemu-debootstrap --arch armhf jessie ./
+
+hacer chroot, cambiar el pass del root, editar resolv.conf y sources.list e instalar los paquetes que requieran.
+
+ej : apt-get install locales openssh-client openssh-server openvpn iptables iproute iptraf tcpdump isc-dhcp-client python mc nano 
+
+
+
+instalar la sd
+
+card=your card device
+dd if=/dev/zero of=$card
+
+cd u-boot-sunxi
+dd if=spl/sunxi-spl.bin of=$card bs=1024 seek=8
+dd if=u-boot.bin of=$card bs=1024 seek=32
+
+mount ${card}1 /mnt
+cd chroot-armhf
+tar --exclude=qemu-arm-static -cf - . | tar -C /mnt -xvf -
+
+
+
+
+
+NOTAS UTILES :
+
+para pasar a la notebook el kernel compilado (se supone la redirección del ssh en 2048)
+
+scp -P 2048 root@127.0.0.1:/root/linux-sunxi/arch/arm/boot/uImage ./
+scp -P 2048 -r root@127.0.0.1:/root/modules.tar.gz ./
+
+
+
+
+
+
+
+
+
+
+
+
+
+##### aceleración grafica ######
+
+
+crear un /etc/udev/rules.d/50-mali.rules
+
+KERNEL=="mali", MODE="0660", GROUP="video"
+KERNEL=="ump", MODE="0660", GROUP="video"
+
+para instalar los binary drivers hay que compilar dentro del cubie ya que chequea varias cosas del entorno y de los drivers instalados.
+
+como debian trae libdri2 dentro del X, no tenemos el libdri2-dev
+asi que hay que bajarlo :
+
+apt-get install automake libtool
+git clone https://github.com/robclark/libdri2
+cd libdri2
+./autogen.sh
+make
+
+ahora instalamos el mali.
+apt-get install build-essential xorg-dev xutils-dev
+apt-get install libdrm-dev
+
+git clone https://github.com/linux-sunxi/sunxi-mali.git
+cd sunxi-mali
+git submodule init
+git submodule update
+make install
+
+
+ahora pasamos a instalar el driver para el X11.
+
+git clone https://github.com/ssvb/xf86-video-sunxifb.git
+cd xf86-video-sunxifb
+autoreconf -vi
+./configure --prefix=/usr
+make
+make install
+
+
+hay que acomodar para que vea el Dri2 con el ldconfig
+
+notas adicionales : http://www.cubieforums.com/index.php?topic=30.0
+
+
+###############
+
+cedarx desde : http://linux-sunxi.org/CedarX/libve
+
+
+ wget http://ssvb.name/files/20130509/system.tar.gz
+ wget https://github.com/allwinner-dev-team/android_external_cedarx/raw/ef36cd760e9d76a2/CedarAndroidLib/LIB_JB_F23/libcedarv_adapter.so
+ wget https://github.com/allwinner-dev-team/android_external_cedarx/raw/ef36cd760e9d76a2/CedarAndroidLib/LIB_JB_F23/libcedarv_base.so
+ wget https://github.com/allwinner-dev-team/android_external_cedarx/raw/ef36cd760e9d76a2/CedarAndroidLib/LIB_JB_F23/libcedarxosal.so
+ wget https://github.com/allwinner-dev-team/android_external_cedarx/raw/ef36cd760e9d76a2/CedarAndroidLib/LIB_JB_F23/libve.so
+
+  git clone -b cedarx git://github.com/ssvb/libhybris.git
+  cd libhybris/hybris
+  ./autogen.sh --prefix=/usr/local/hybris
+  make
+  make install
+  
+  
+
+############## compilar xbmc #################
+
+http://linux-sunxi.org/XBMC
+
+
+apt-get build-dep xbmc
+apt-get install swig default-jre libgtk2.0-bin libssh-4 libssh-dev
+
+#hardware acel
+echo -e "\nA10HWR=1" >> /etc/environment (to set it permanently)
+
+
+git clone git://github.com/rellla/xbmca10.git
+
+
+
+
+
+
+
+
+
+
+
+
+como compilar el X desde las fuentes con el driver mali para X
+https://www.miniand.com/forums/forums/development--3/topics/getting-x11-display-drivers-working-with-headless-debian
+
+
+
+
+
+g2d in kernel 
+
+https://groups.google.com/forum/#!msg/linux-sunxi/eHX0OlScWBY/Fdc6aeDugFcJ
+
+
+http://linux-sunxi.org/Optimizing_system_performance
+http://linux-sunxi.org/Binary_drivers
+
+
+
+
+
+
+
+
+
+
+
+//////////////////////////// para pasar a la sd despues de compilar //////////////////////////////
+
+
+ssh -R 2048:127.0.0.1:22 root@192.168.0.110
+
+
+cd /media/8BAB-47D2
+scp -P 2048 root@127.0.0.1:/root/linux-sunxi/arch/arm/boot/uImage ./
+
+cd /media/7d4a6d87-22bc-44ad-b8c6-caa3c254190b/lib/modules/
+ssh -p 2048 root@127.0.0.1 tar -cvzf - -C /root/linux-sunxi/output/lib/modules ./* | tar -xvzf -
+
+
+
+
+
+
+
+
+
+
+
+
+
+/////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+https://groups.google.com/forum/#!msg/cubieboard/4DQt4e6VqV8/DNeLlBN3-lEJ
+
+
+referencias :
+http://linux-sunxi.org/Building_on_Debian
+http://linux-sunxi.org/FirstSteps
+https://github.com/linux-sunxi/u-boot-sunxi/wiki
+
+http://www.cubieforums.com/index.php?topic=223.0                  ---------- tema de la memoria.
+http://dl.linux-sunxi.org/users/amery/sunxi-3.0/latest/
+http://forum.tinycorelinux.net/index.php?topic=15120.0
+
+
+
+
+############## cubiezzzz ##############
+
+http://www.cubieforums.com/index.php?topic=442.0
