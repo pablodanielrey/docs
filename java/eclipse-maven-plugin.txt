@@ -132,3 +132,13 @@ Define value for property 'module': : PersonGWT
 3 - importar el proyecto en el eclipse usando "java general ---> import Existing project into workspace"
 4 - click derecho en el proyecto --> propiedades --> google --> Web Application --> tildar this project has a war directory
 
+/////////////////////////////////////////
+/////////////////////////////////////////
+/////////
+///////// IMPORTANTE2
+/////////
+////////////////////////////////////////
+////////////////////////////////////////
+si se compila el codigo gwt desde eclipse. Despues de hacer click en compile va a preguntar la carpeta del WAR.
+debe seleccionarse : target/nombre-del-proyecto-version
+
