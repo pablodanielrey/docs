@@ -118,6 +118,16 @@ IMPORTATE!!!! : PARA QUE QUEDE ACORDE EL PLUGIN DE ECLIPSE DE WEBTOOLKIT Y LA ES
 1 - generar el proyecto usando : 
 	mvn archetype:generate -DarchetypeGroupId=org.codehaus.mojo -DarchetypeArtifactId=gwt-maven-plugin -DarchetypeVersion=2.5.1
 
+ejemplo de valores a generar dado un proyecto persona :
+
+Define value for property 'groupId': : ar.com.dcsys.gwt
+Define value for property 'artifactId': : personGWT
+Define value for property 'version':  1.0-SNAPSHOT: : 
+Define value for property 'package':  ar.com.dcsys.gwt: : ar.com.dcsys.gwt.person
+Define value for property 'module': : PersonGWT
+
+
+
 2 - generar los archivos de eclipse :  mvn eclipse:clean eclipse:eclipse
 3 - importar el proyecto en el eclipse usando "java general ---> import Existing project into workspace"
 4 - click derecho en el proyecto --> propiedades --> google --> Web Application --> tildar this project has a war directory
