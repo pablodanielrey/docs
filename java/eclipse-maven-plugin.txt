@@ -2,193 +2,123 @@ para que el plugin funcione para generar lo necesario para los proyectos gwt.
 es necesario ajustar algunos parámetros en el pom.
 
 
-////////////// generados por el plugin gwt-maven-plugin ////////////////
 
+por lo tanto para los proyectos gwt se necesita agregar las siguientes propiedades al plugin de eclipse-maven
 
-son necesarias los siguientes natures :
+ <plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-eclipse-plugin</artifactId>
+    <version>2.9</version>
 
-    <nature>org.eclipse.jem.workbench.JavaEMFNature</nature>
-    <nature>org.eclipse.wst.common.modulecore.ModuleCoreNature</nature>
-    <nature>org.eclipse.jdt.core.javanature</nature>
-    <nature>org.eclipse.wst.common.project.facet.core.nature</nature>
-    <nature>org.eclipse.wst.jsdt.core.jsNature</nature>
-    <nature>com.google.gwt.eclipse.core.gwtNature</nature>
+    <configuration>
 
-son necesarios los siguientes builders :
+	<!--
+	<sourceIncludes>
+        	<sourceInclude>**/*.myExtension</sourceInclude>
+        </sourceIncludes>	
+	-->
 
-      <name>org.eclipse.wst.jsdt.core.javascriptValidator</name>
-      <name>org.eclipse.wst.common.project.facet.core.builder</name>
-      <name>org.eclipse.jdt.core.javabuilder</name>
-      <name>org.eclipse.wst.validation.validationbuilder</name>
-      <name>com.google.gdt.eclipse.core.webAppProjectValidator</name>
-      <name>com.google.gwt.eclipse.core.gwtProjectValidator</name>
+	<downloadSources>true</downloadSources>
+	<downloadJavadocs>true</downloadJavadocs>
 
-se configuran por defecto los siguientes sources por el plugin gwt-maven-plugin
+	<!-- false = genera referencias a los jars instalados en los repositorios, true = genera referencias a los proyectos -->
+	<useProjectReferences>true</useProjectReferences>
 
-        <classpathentry kind="src" output="src/main/webapp/WEB-INF/classes" path="src/main/java"/>
-        <classpathentry kind="src" path="target/generated-sources/gwt"/>
-        <classpathentry kind="src" output="src/main/webapp/WEB-INF/classes" path="src/main/resources"/>
-        <classpathentry kind="src" output="target/test-classes" path="src/test/java"/>
-        <classpathentry kind="src" output="target/test-classes" path="src/test/resources"/>
-        <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
-        <classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
-        <classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER">
-                <attributes>
-                        <attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-                </attributes>
-        </classpathentry>
-        <classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
-        <classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-        <classpathentry kind="output" path="src/main/webapp/WEB-INF/classes"/>
+	<!-- referencias : http://maven.apache.org/plugins/maven-eclipse-plugin/examples/multi-module-projects.html -->
+	<projectNameTemplate>[artifactId]-[version]</projectNameTemplate>
+	<wtpmanifest>true</wtpmanifest>
+	<wtpapplicationxml>true</wtpapplicationxml>
 
-como se ve el output se configura como "src/main/webapp/WEB-INF/classes"
+	<!-- no soporta una version superior que la 2.0 -->
+	<wtpversion>2.0</wtpversion>
 
+	<manifest>${basedir}/src/main/resources/META-INF/MANIFEST.MF</manifest>
 
-dentro de .settings quedan los siguientes archivos :
+	<classpathContainers>
+		<classpathContainer>org.eclipse.jdt.launching.JRE_CONTAINER</classpathContainer>
+		<classpathContainer>com.google.gwt.eclipse.core.GWT_CONTAINER</classpathContainer>
+		<classpathContainer>org.eclipse.jst.j2ee.internal.web.container</classpathContainer>
+		<classpathContainer>org.eclipse.jst.j2ee.internal.module.container</classpathContainer>
+	</classpathContainers>
 
--- com.google.gdt.eclipse.core.prefs
-#Thu Sep 02 10:55:28 CEST 2010
-eclipse.preferences.version=1
-jarsExcludedFromWebInfLib=
-warSrcDir=src/main/webapp
-warSrcDirIsOutput=true
+        <additionalProjectFacets>
+		<java>1.7</java>
+		<wst.jsdt.web>1.0</wst.jsdt.web>
+           	<jst.web>3.0</jst.web>
+         </additionalProjectFacets>
 
--- com.google.gwt.eclipse.core.prefs
-#Thu Jun 16 11:14:17 CEST 2011
-eclipse.preferences.version=1
-entryPointModules=
-filesCopiedToWebInfLib=gwt-servlet.jar
-gwtCompileSettings=PGd3dC1jb21waWxlLXNldHRpbmdzPjxsb2ctbGV2ZWw+SU5GTzwvbG9nLWxldmVsPjxvdXRwdXQtc3R5bGU+T0JGVVNDQVRFRDwvb3V0cHV0LXN0eWxlPjxleHRyYS1hcmdzPjwhW0NEQVRBWy13YXIgc3JjL21haW4vd2ViYXBwXV0+PC9leHRyYS1hcmdzPjx2bS1hcmdzPjwhW0NEQVRBWy1YbXg1MTJtXV0+PC92bS1hcmdzPjxlbnRyeS1wb2ludC1tb2R1bGU+Y29tLmNvbXBhbnkuU29tZU1vZHVsZTwvZW50cnktcG9pbnQtbW9kdWxlPjwvZ3d0LWNvbXBpbGUtc2V0dGluZ3M+
+	<projectnatures>
+		<projectnature>org.eclipse.jem.workbench.JavaEMFNature</projectnature>
+		<projectnature>org.eclipse.wst.common.modulecore.ModuleCoreNature</projectnature>
+		<projectnature>org.eclipse.jdt.core.javanature</projectnature>
+		<projectnature>org.eclipse.wst.common.project.facet.core.nature</projectnature>
+		<projectnature>org.eclipse.wst.jsdt.core.jsNature</projectnature>
+		<projectnature>com.google.gwt.eclipse.core.gwtNature</projectnature>
+	</projectnatures>
 
-la cadena en base64 contiene :
+	<buildcommands>
+		<buildcommand>org.eclipse.wst.jsdt.core.javascriptValidator</buildcommand>
+		<buildcommand>org.eclipse.wst.common.project.facet.core.builder</buildcommand>
+		<buildcommand>org.eclipse.jdt.core.javabuilder</buildcommand>
+		<buildcommand>org.eclipse.wst.validation.validationbuilder</buildcommand>
+		<buildcommand>com.google.gdt.eclipse.core.webAppProjectValidator</buildcommand>
+		<buildcommand>com.google.gwt.eclipse.core.gwtProjectValidator</buildcommand>
+	</buildcommands>
 
-<gwt-compile-settings><log-level>INFO</log-level><output-style>OBFUSCATED</output-style><extra-args><![CDATA[-war src/main/webapp]]></extra-args><vm-args><![CDATA[-Xmx512m]]></vm-args><entry-point-module>com.company.SomeModule</entry-point-module></gwt-compile-settings>
+     </configuration>
 
-
--- org.eclipse.jdt.core.prefs
-#Thu Sep 02 10:42:20 CEST 2010
-eclipse.preferences.version=1
-org.eclipse.jdt.core.compiler.codegen.inlineJsrBytecode=enabled
-org.eclipse.jdt.core.compiler.codegen.targetPlatform=1.5
-org.eclipse.jdt.core.compiler.compliance=1.5
-org.eclipse.jdt.core.compiler.problem.assertIdentifier=error
-org.eclipse.jdt.core.compiler.problem.enumIdentifier=error
-org.eclipse.jdt.core.compiler.problem.forbiddenReference=warning
-org.eclipse.jdt.core.compiler.source=1.5
-
--- org.eclipse.wst.common.component 
-<?xml version="1.0" encoding="UTF-8"?>
-<project-modules id="moduleCoreId" project-version="1.5.0">
-  <wb-module deploy-name="${module}">
-    <wb-resource deploy-path="/" source-path="/src/main/webapp"/>
-    <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
-    <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/java"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/target/generated-sources/gwt"/>
-    <property name="context-root" value="${module}"/>
-    <property name="java-output-path" value="/${module}/target/www/WEB-INF/classes"/>
-  </wb-module>
-</project-modules>
-
-
--- org.eclipse.wst.common.project.facet.core.xml
-<?xml version="1.0" encoding="UTF-8"?>
-<faceted-project>
-  <fixed facet="wst.jsdt.web" />
-  <installed facet="java" version="1.5" />
-  <installed facet="jst.web" version="2.3" />
-  <installed facet="wst.jsdt.web" version="1.0" />
-</faceted-project>
-
-
--- org.eclipse.wst.jsdt.ui.superType.container
-org.eclipse.wst.jsdt.launching.baseBrowserLibrary
-
-
--- org.maven.ide.eclipse.prefs
-#Thu Sep 02 10:42:12 CEST 2010
-activeProfiles=
-eclipse.preferences.version=1
-fullBuildGoals=process-test-resources
-includeModules=false
-resolveWorkspaceProjects=true
-resourceFilterGoals=process-resources resources\\:testResources
-skipCompilerPlugin=true
-version=1
+  </plugin>
 
 
 
+-------------------------
+
+se agrega lo siguiente en la config del gwt-maven-plugin ya que se va a trabajar con websockets y el jetty incorporado que tiene
+gwt es una version que no lo soporta.
+
+<plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>gwt-maven-plugin</artifactId>
+        <version>2.5.1</version>
+	....
+	....
+	<configuration>
+		...
+		...
+		<port>8080</port>
+		<noServer>true</noServer>
 
 
+-----------------------
+
+se agrega ele jetty que querramos con la version que se necesite y se ejecuta aparte usando :
+
+mvn jetty:run
+o
+mvn jetty:run-war
+
+    <plugin>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-maven-plugin</artifactId>
+        <version>9.1.0.v20131115</version>
+	
+	<!-- para que sea acorde con el gwt-maven-plugin -->
+	<configuration>
+                <webAppSourceDirectory>${webappDirectory}</webAppSourceDirectory>
+        </configuration>
+
+    </plugin>
 
 
+--------------------------
 
 
+IMPORTATE!!!! : PARA QUE QUEDE ACORDE EL PLUGIN DE ECLIPSE DE WEBTOOLKIT Y LA ESTRUCTURA DE MAVEN ES NECESARIO :
 
+1 - generar el proyecto usando : 
+	mvn archetype:generate -DarchetypeGroupId=org.codehaus.mojo -DarchetypeArtifactId=gwt-maven-plugin -DarchetypeVersion=2.5.1
 
-////////////// diferencias con un proyecto gwt generado en eclipse //////////////////
-
-
-se agrega un bulider al final :
-
-	<name>org.eclipse.wst.validation.validationbuilder</name>
-
-
-en el archivo en .settings :
-
-
--- com.google.gwt.eclipse.core.prefs
-
-la cadena en base64 esta :
-<gwt-compile-settings><log-level>INFO</log-level><output-style>OBFUSCATED</output-style><extra-args><![CDATA[-localWorkers 8]]></extra-args><vm-args><![CDATA[-Xmx8192m]]></vm-args><entry-point-module>ar.com.dcsys.DCSys</entry-point-module></gwt-compile-settings>
-
-
-se agrega el archivo de apt :
-
--- org.eclipse.jdt.apt.core.prefs
-eclipse.preferences.version=1
-org.eclipse.jdt.apt.aptEnabled=true
-org.eclipse.jdt.apt.genSrcDir=.apt_generated
-org.eclipse.jdt.apt.reconcileEnabled=true
-
-
-el archivo siguiente varía un poquito por el tema de la configuración para procesar anotaciones y src compliant :
-
--- org.eclipse.jdt.core.prefs
-eclipse.preferences.version=1
-org.eclipse.jdt.core.compiler.codegen.inlineJsrBytecode=enabled
-org.eclipse.jdt.core.compiler.codegen.targetPlatform=1.7
-org.eclipse.jdt.core.compiler.codegen.unusedLocal=preserve
-org.eclipse.jdt.core.compiler.compliance=1.7
-org.eclipse.jdt.core.compiler.debug.lineNumber=generate
-org.eclipse.jdt.core.compiler.debug.localVariable=generate
-org.eclipse.jdt.core.compiler.debug.sourceFile=generate
-org.eclipse.jdt.core.compiler.problem.assertIdentifier=error
-org.eclipse.jdt.core.compiler.problem.enumIdentifier=error
-org.eclipse.jdt.core.compiler.processAnnotations=enabled
-org.eclipse.jdt.core.compiler.source=1.7
-
-
-en el facetado diferencias en versiones y ninguna faceta fija :
-
--- org.eclipse.wst.common.project.facet.core.xml
-<?xml version="1.0" encoding="UTF-8"?>
-<faceted-project>
-  <runtime name="GlassFish 4.0"/>
-  <installed facet="java" version="1.7"/>
-  <installed facet="jst.web" version="3.0"/>
-  <installed facet="wst.jsdt.web" version="1.0"/>
-</faceted-project>
-
-
-se agrega un archivo mas en la raiz llamado :
-
--- .factorypath
-<factorypath>
-    <factorypathentry kind="PLUGIN" id="org.eclipse.jst.ws.annotations.core" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="EXTJAR" id="/java/libs/gwt-2.5-0/gwt-2.5.0/requestfactory-apt.jar" enabled="true" runInBatchMode="false"/>
-</factorypath>
-
-
-////////////////////////////////////////////////////////////////////////////////////////
-
+2 - generar los archivos de eclipse :  mvn eclipse:clean eclipse:eclipse
+3 - importar el proyecto en el eclipse usando "java general ---> import Existing project into workspace"
+4 - click derecho en el proyecto --> propiedades --> google --> Web Application --> tildar this project has a war directory
 

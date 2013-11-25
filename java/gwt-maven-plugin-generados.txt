@@ -1,0 +1,211 @@
+para que el plugin funcione para generar lo necesario para los proyectos gwt.
+es necesario ajustar algunos parámetros en el pom.
+
+
+////////////// generados por el plugin gwt-maven-plugin ////////////////
+
+
+son necesarias los siguientes natures :
+
+    <nature>org.eclipse.jem.workbench.JavaEMFNature</nature>
+    <nature>org.eclipse.wst.common.modulecore.ModuleCoreNature</nature>
+    <nature>org.eclipse.jdt.core.javanature</nature>
+    <nature>org.eclipse.wst.common.project.facet.core.nature</nature>
+    <nature>org.eclipse.wst.jsdt.core.jsNature</nature>
+    <nature>com.google.gwt.eclipse.core.gwtNature</nature>
+
+son necesarios los siguientes builders :
+
+      <name>org.eclipse.wst.jsdt.core.javascriptValidator</name>
+      <name>org.eclipse.wst.common.project.facet.core.builder</name>
+      <name>org.eclipse.jdt.core.javabuilder</name>
+      <name>org.eclipse.wst.validation.validationbuilder</name>
+      <name>com.google.gdt.eclipse.core.webAppProjectValidator</name>
+      <name>com.google.gwt.eclipse.core.gwtProjectValidator</name>
+
+se configuran por defecto los siguientes sources por el plugin gwt-maven-plugin
+
+        <classpathentry kind="src" output="src/main/webapp/WEB-INF/classes" path="src/main/java"/>
+        <classpathentry kind="src" path="target/generated-sources/gwt"/>
+        <classpathentry kind="src" output="src/main/webapp/WEB-INF/classes" path="src/main/resources"/>
+        <classpathentry kind="src" output="target/test-classes" path="src/test/java"/>
+        <classpathentry kind="src" output="target/test-classes" path="src/test/resources"/>
+        <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
+        <classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
+        <classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER">
+                <attributes>
+                        <attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+                </attributes>
+        </classpathentry>
+        <classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
+        <classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+        <classpathentry kind="output" path="src/main/webapp/WEB-INF/classes"/>
+
+como se ve el output se configura como "src/main/webapp/WEB-INF/classes"
+
+
+dentro de .settings quedan los siguientes archivos :
+
+-- com.google.gdt.eclipse.core.prefs
+#Thu Sep 02 10:55:28 CEST 2010
+eclipse.preferences.version=1
+jarsExcludedFromWebInfLib=
+warSrcDir=src/main/webapp
+warSrcDirIsOutput=true
+
+-- com.google.gwt.eclipse.core.prefs
+#Thu Jun 16 11:14:17 CEST 2011
+eclipse.preferences.version=1
+entryPointModules=
+filesCopiedToWebInfLib=gwt-servlet.jar
+gwtCompileSettings=PGd3dC1jb21waWxlLXNldHRpbmdzPjxsb2ctbGV2ZWw+SU5GTzwvbG9nLWxldmVsPjxvdXRwdXQtc3R5bGU+T0JGVVNDQVRFRDwvb3V0cHV0LXN0eWxlPjxleHRyYS1hcmdzPjwhW0NEQVRBWy13YXIgc3JjL21haW4vd2ViYXBwXV0+PC9leHRyYS1hcmdzPjx2bS1hcmdzPjwhW0NEQVRBWy1YbXg1MTJtXV0+PC92bS1hcmdzPjxlbnRyeS1wb2ludC1tb2R1bGU+Y29tLmNvbXBhbnkuU29tZU1vZHVsZTwvZW50cnktcG9pbnQtbW9kdWxlPjwvZ3d0LWNvbXBpbGUtc2V0dGluZ3M+
+
+la cadena en base64 contiene :
+
+<gwt-compile-settings><log-level>INFO</log-level><output-style>OBFUSCATED</output-style><extra-args><![CDATA[-war src/main/webapp]]></extra-args><vm-args><![CDATA[-Xmx512m]]></vm-args><entry-point-module>com.company.SomeModule</entry-point-module></gwt-compile-settings>
+
+
+-- org.eclipse.jdt.core.prefs
+#Thu Sep 02 10:42:20 CEST 2010
+eclipse.preferences.version=1
+org.eclipse.jdt.core.compiler.codegen.inlineJsrBytecode=enabled
+org.eclipse.jdt.core.compiler.codegen.targetPlatform=1.5
+org.eclipse.jdt.core.compiler.compliance=1.5
+org.eclipse.jdt.core.compiler.problem.assertIdentifier=error
+org.eclipse.jdt.core.compiler.problem.enumIdentifier=error
+org.eclipse.jdt.core.compiler.problem.forbiddenReference=warning
+org.eclipse.jdt.core.compiler.source=1.5
+
+-- org.eclipse.wst.common.component 
+<?xml version="1.0" encoding="UTF-8"?>
+<project-modules id="moduleCoreId" project-version="1.5.0">
+  <wb-module deploy-name="${module}">
+    <wb-resource deploy-path="/" source-path="/src/main/webapp"/>
+    <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
+    <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/target/generated-sources/gwt"/>
+    <property name="context-root" value="${module}"/>
+    <property name="java-output-path" value="/${module}/target/www/WEB-INF/classes"/>
+  </wb-module>
+</project-modules>
+
+
+-- org.eclipse.wst.common.project.facet.core.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<faceted-project>
+  <fixed facet="wst.jsdt.web" />
+  <installed facet="java" version="1.5" />
+  <installed facet="jst.web" version="2.3" />
+  <installed facet="wst.jsdt.web" version="1.0" />
+</faceted-project>
+
+
+-- org.eclipse.wst.jsdt.ui.superType.container
+org.eclipse.wst.jsdt.launching.baseBrowserLibrary
+
+
+-- org.maven.ide.eclipse.prefs
+#Thu Sep 02 10:42:12 CEST 2010
+activeProfiles=
+eclipse.preferences.version=1
+fullBuildGoals=process-test-resources
+includeModules=false
+resolveWorkspaceProjects=true
+resourceFilterGoals=process-resources resources\\:testResources
+skipCompilerPlugin=true
+version=1
+
+
+
+
+
+
+
+
+
+
+
+////////////// diferencias con un proyecto gwt generado en eclipse //////////////////
+
+
+se agrega un bulider al final :
+
+	<name>org.eclipse.wst.validation.validationbuilder</name>
+
+
+en el archivo en .settings :
+
+
+-- com.google.gwt.eclipse.core.prefs
+
+la cadena en base64 esta :
+<gwt-compile-settings><log-level>INFO</log-level><output-style>OBFUSCATED</output-style><extra-args><![CDATA[-localWorkers 8]]></extra-args><vm-args><![CDATA[-Xmx8192m]]></vm-args><entry-point-module>ar.com.dcsys.DCSys</entry-point-module></gwt-compile-settings>
+
+
+se agrega el archivo de apt :
+
+-- org.eclipse.jdt.apt.core.prefs
+eclipse.preferences.version=1
+org.eclipse.jdt.apt.aptEnabled=true
+org.eclipse.jdt.apt.genSrcDir=.apt_generated
+org.eclipse.jdt.apt.reconcileEnabled=true
+
+
+el archivo siguiente varía un poquito por el tema de la configuración para procesar anotaciones y src compliant :
+
+-- org.eclipse.jdt.core.prefs
+eclipse.preferences.version=1
+org.eclipse.jdt.core.compiler.codegen.inlineJsrBytecode=enabled
+org.eclipse.jdt.core.compiler.codegen.targetPlatform=1.7
+org.eclipse.jdt.core.compiler.codegen.unusedLocal=preserve
+org.eclipse.jdt.core.compiler.compliance=1.7
+org.eclipse.jdt.core.compiler.debug.lineNumber=generate
+org.eclipse.jdt.core.compiler.debug.localVariable=generate
+org.eclipse.jdt.core.compiler.debug.sourceFile=generate
+org.eclipse.jdt.core.compiler.problem.assertIdentifier=error
+org.eclipse.jdt.core.compiler.problem.enumIdentifier=error
+org.eclipse.jdt.core.compiler.processAnnotations=enabled
+org.eclipse.jdt.core.compiler.source=1.7
+
+
+en el facetado diferencias en versiones y ninguna faceta fija :
+
+-- org.eclipse.wst.common.project.facet.core.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<faceted-project>
+  <runtime name="GlassFish 4.0"/>
+  <installed facet="java" version="1.7"/>
+  <installed facet="jst.web" version="3.0"/>
+  <installed facet="wst.jsdt.web" version="1.0"/>
+</faceted-project>
+
+
+se agrega un archivo mas en la raiz llamado :
+
+-- .factorypath
+<factorypath>
+    <factorypathentry kind="PLUGIN" id="org.eclipse.jst.ws.annotations.core" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="EXTJAR" id="/java/libs/gwt-2.5-0/gwt-2.5.0/requestfactory-apt.jar" enabled="true" runInBatchMode="false"/>
+</factorypath>
+
+
+////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+como nota adicional. la version de wtp en los distintos eclipses.
+referencia : http://wiki.eclipse.org/WTP_FAQ
+
+
+WTP 1.0.x runs on Eclipse 3.1.x.
+WTP 1.5.x runs on Eclipse 3.2 (a.k.a. Callisto).
+WTP 2.0.x runs on Eclipse 3.3 (a.k.a. Europa).
+WTP 3.0.x runs on Eclipse 3.4 (a.k.a. Ganymede).
+WTP 3.1 runs on Eclipse 3.5 (a.k.a. Galileo).
+WTP 3.2 runs on Eclipse 3.6 (a.k.a. Helios).
+WTP 3.3 runs on Eclipse 3.7 (a.k.a. Indigo)
+WTP 3.4 runs on Eclipse 3.8/4.2 (a.k.a. Juno if it's 4.2).
+WTP 3.5 runs on Eclipse 4.3 (a.k.a. Kepler). It is the only supported release.
+
+
+
