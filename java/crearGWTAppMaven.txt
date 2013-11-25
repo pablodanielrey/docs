@@ -1,0 +1,7 @@
+usando :
+
+mvn archetype:generate -DarchetypeGroupId=org.codehaus.mojo -DarchetypeArtifactId=gwt-maven-plugin -DarchetypeVersion=2.5.1
+
+pregunta todos los datos necesarios.
+el modulo, y todo lo de maven.
+

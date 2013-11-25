@@ -1,0 +1,1 @@
+mvn archetype:generate -DgroupId=ar.com.dcsys.firmware -DartifactId=serialJsscDevice -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
