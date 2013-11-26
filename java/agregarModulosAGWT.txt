@@ -1,0 +1,65 @@
+para agregar modulos a un proyecto gwt.
+se debe hacer lo siguiente :
+
+
+1 - en el proyecto que va a ser el modulo hay que agregar para que genere un jar con los sources.
+
+  <build>
+        <plugins>
+          
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9.1</version>
+            </plugin>
+
+        </plugins>
+  </build>
+
+se puede ahora compilar usando :
+
+mvn clean compile source:jar javadoc:jar package install
+
+2 - agregar la definicion del modulo dentro de src/main/resources/ :
+
+crear el paquete que representa el modulo. (igual al del source menos el ultimo paquete)
+y crear un archivo con el nombre que se le va a dar al modulo con el contenido :
+
+-- AlogGWT.gwt.xml
+<module>
+  <inherits name="com.google.gwt.user.User"/>
+  <source path="person"/>
+</module>
+
+
+
+3 - en el proyecto que va a usar el modulo gwt se debe ajustar la config de gwt-maven-plugin para que incluya esos sources.
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>gwt-maven-plugin</artifactId>
+        <version>2.1.0</version>
+        <executions>
+            ...
+        </executions>
+     
+           <configuration>
+                  <compileSourcesArtifacts>
+                    <artifact>org.codehaus.mojo:domain</artifact>
+                  </compileSourcesArtifacts>
+           </configuration>
+
+      </plugin>
+
+
+4 - agregar el inherits con el nombre del modulo en el descriptor del proyecto gwt.
+
+ej :
+<inherits name="ar.com.dcsys.gwt.PersonEntitiesGWT"/>
+
