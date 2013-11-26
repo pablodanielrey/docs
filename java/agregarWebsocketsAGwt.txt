@@ -1,0 +1,47 @@
+una librería simple y que funciona bien es :
+
+https://github.com/sksamuel/gwt-websockets
+
+1 - para agregar y podes usar websockets se debe agregar al pom.xml como dependencia lo siguiente :
+
+<dependency>
+    <groupId>com.sksamuel.gwt</groupId>
+    <artifactId>gwt-websockets</artifactId>
+    <version>1.0.3</version>
+</dependency>
+
+2 - agregar el ihnerits en el modulo gwt.
+
+
+<inherits name="com.sksamuel.gwt.GwtWebsockets" />
+
+
+
+3 - para la parte del servidor hay que agregar el websocket endpoint. se debe agregar la dependencia :
+
+<dependency>
+    <groupId>javax.websocket</groupId>
+    <artifactId>javax.websocket-api</artifactId>
+    <version>1.0</version>
+</dependency>
+
+o se tiene las alternativas :
+
+<dependency>
+    <groupId>javax.websocket</groupId>
+    <artifactId>javax.websocket-all</artifactId>
+    <version>1.0</version>
+</dependency
+
+y 
+
+<dependency>
+    <groupId>javax.websocket</groupId>
+    <artifactId>javax.websocket-client-api</artifactId>
+    <version>1.0</version>
+</dependency>
+
+dependiendo de lo que se requiera.
+
+
+
