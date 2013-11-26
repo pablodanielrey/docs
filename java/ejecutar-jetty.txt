@@ -1,0 +1,21 @@
+si no se encuentra el plugin de jetty etnocnes hay que setear en las settings.xml del maven para que busqye
+en ese grupo los plugins.
+
+ej :
+
+The Maven install: $M2_HOME/conf/settings.xml
+A user's install: ${user.home}/.m2/settings.xml 
+
+
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                      http://maven.apache.org/xsd/settings-1.0.0.xsd">
+  ...
+  <pluginGroups>
+    <pluginGroup>org.mortbay.jetty</pluginGroup>
+  </pluginGroups>
+  ...
+</settings>
+
+
