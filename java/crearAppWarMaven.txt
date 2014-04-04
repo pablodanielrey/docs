@@ -1,5 +1,12 @@
 mvn archetype:generate -DgroupId=ar.com.dcsys.firmware -DartifactId=serialJsscDevice -DarchetypeArtifactId=maven-archetype-webapp -DinteractiveMode=false
 
+importante!!! si se quiere agregar codigo java que no sea ni jsp ni recursos debe crearse dentro del proyecto la carpeta :
+
+src/main/java
+
+y de ahi colgar todo el codigo. no es creada automaticamente por el arquetipo.
+
+
 
 opcionalmente agregar las siguientes dependencias y plugins :
 
