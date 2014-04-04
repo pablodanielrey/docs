@@ -1,1 +1,66 @@
 mvn archetype:generate -DgroupId=ar.com.dcsys.firmware -DartifactId=serialJsscDevice -DarchetypeArtifactId=maven-archetype-webapp -DinteractiveMode=false
+
+
+opcionalmente agregar las siguientes dependencias y plugins :
+
+para la injeccion se tienen 2 opciones. solo la parte de cliente simple :
+
+        <dependency>
+              <groupId>javax.inject</groupId>
+              <artifactId>javax.inject</artifactId>
+              <version>1</version>
+              <scope>provided</scope>
+        </dependency>
+
+o la parte de cdi con la api completa :
+
+        <dependency>
+           <groupId>javax.enterprise</groupId>
+           <artifactId>cdi-api</artifactId>
+           <version>1.1</version>
+           <scope>provided</scope>
+        </dependency>
+
+
+
+despues hay que agregar las dependencias de los servlets :
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${servlet.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+
+
+y agregar el plugin para poder ejecutarlo usando glassfish :
+
+    <plugins>
+
+        <plugin>
+                <groupId>org.glassfish.embedded</groupId>
+                <artifactId>maven-embedded-glassfish-plugin</artifactId>
+                <version>4.0</version>
+
+                <configuration>
+                        <app>target/reportsWar.war</app>
+                        <port>8080</port>
+                        <contextRoot>/reportsWar</contextRoot>
+                        <debug>true</debug>
+                        <autoCreate>true</autoCreate>
+                </configuration>
+                <executions>
+                <execution>
+                     <phase>install</phase>
+                     <goals>
+                            <goal>deploy</goal>
+                            <goal>run</goal>
+                     </goals>
+                  </execution>
+               </executions>
+        </plugin>
+
+
+    </plugins>
+
