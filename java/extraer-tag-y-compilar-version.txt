@@ -1,0 +1,29 @@
+para extraer un cierto tag del repositorio.
+
+ git tag -l			-- muestra todos los tags existentes.
+
+por ejemplo el v0.1-asistencia :
+
+ git archive -o /dir/a/releases/v0.1-asistencia.tar.gz v0.1-asistencia
+
+eso deja el tar.gz en esa carpta
+
+-----
+
+etapa de compilación :
+se debe usar otro repositorio local de maven para asegurarse de que todo lo contenido es del release que se quiere compilar.
+asi que se puede copiar el $HOME/.m2 a otra carpeta. por ejemplo $HOME/.m2-release
+eliminar el codigo del repositorio local.
+
+ rm -R $HOME/.m2-release/repository/ar/com/dcsys
+
+y para ejecutar los comandos de maven se puede especificar esa ruta al repositorio.
+
+ mvn -Dmaven.repo.local=/home/pablo/.m2-release/repository clean source:jar javadoc:jar compile package install
+
+eso compila usando ese repositorio.
+
+------
+
+
+
